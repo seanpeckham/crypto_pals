@@ -6,10 +6,8 @@ use std::cmp::*;
 use std::collections::BinaryHeap;
 use std::collections::LinkedList;
 use std::iter::*;
-use std::io::prelude::*;
-use std::io::BufReader;
-use std::fs::File;
 
+use util::*;
 use s1::ch1::*;
 use s1::ch2::*;
 use s1::ch3::*;
@@ -224,13 +222,3 @@ impl RepKeyXor {
     }   
 }
 
-pub fn file_concat_lines(filename: &str) -> String {
-    let f = File::open(filename).unwrap();
-    let f = BufReader::new(f);
-    let mut s = String::new();
-    
-    for line in f.lines() {
-        s.push_str(&line.unwrap());
-    }
-    s
-}

@@ -1,21 +1,5 @@
 
-use std::io::prelude::*;
-use std::fs::File;
-use std::io::BufReader;
-
-use s1::ch1::*;
 use s1::ch3::*;
-
-pub fn hex_file_to_raw_lines(fname: &str) -> Vec<Vec<u8>> {
-    let f = File::open(fname).unwrap();
-    let f = BufReader::new(f);
-    let mut v = Vec::new();
-
-    for line in f.lines() {
-        v.push(hex_to_raw(&line.unwrap()));
-    }
-    v
-}
 
 pub fn find_str_1byte_xor_detail(strings: &Vec<Vec<u8>>) -> CipherGuessPair {
     let guesses: Vec<Vec<u8>> =

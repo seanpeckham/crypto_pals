@@ -1,4 +1,3 @@
-//#![allow(dead_code)]
 
 extern crate openssl;
 
@@ -6,29 +5,14 @@ use std::env;
 use std::io::prelude::*;
 use std::fs::File;
 
+#[macro_use]
+mod util;
+use util::*;
+
 mod s1;
 
-macro_rules! use_ch {
-    ( $( $x:ident ),* ) => {
-        $(
-            use s1::$x::*;
-        )*
-    }
-}
+use_ch!(s1, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8);
 
-use_ch!(ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8);
-
-macro_rules! get_input {
-    ( $name:ident, $x:expr ) => {
-        let $name =
-            if let Some(arg) = env::args().skip(2 + $x).next() {
-                arg
-            } else {
-                println!("expected arg {}", $x);
-                return ()
-            }
-    }
-}
 
 fn challenge1() {
     
@@ -140,18 +124,6 @@ fn challenge7() {
 
 fn challenge8() {
     println!("{}", find_rep_blocks("texts/ch8.txt"));
-}
-
-macro_rules! dispatch_ch {
-    ( $argi:ident, $( $x:ident ),* )
-        => {
-        if let Some(arg) = $argi.next() {
-            match arg.as_str() {
-                $( stringify!($x) => $x() ),*,
-                _ => ()
-            }
-        }
-    }
 }
 
 fn main() {
