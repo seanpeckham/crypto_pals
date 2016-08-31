@@ -6,6 +6,7 @@ use s1::ch1::*;
 
 macro_rules! use_ch {
     ( $s:ident, $( $x:ident ),* ) => {
+        mod $s;
         $(
             use $s::$x::*;
         )*

@@ -7,15 +7,12 @@ use std::env;
 use std::io::prelude::*;
 use std::fs::File;
 
-mod s1;
-mod s2;
-
 #[macro_use]
 mod util;
 use util::*;
 
-use_ch!(s1, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8);
-use_ch!(s2, ch9, ch10);
+use_ch!(s1, ch1);//, ch2, ch3, ch4, ch5, ch6, ch7, ch8);
+use_ch!(s2, ch9, ch10, ch11, ch12);
 
 fn challenge9() {
     let mut plaintext = b"YELLOW_SUBMARINE".to_vec();
@@ -36,7 +33,7 @@ fn challenge10() {
     // print!("{}", String::from_utf8(output).unwrap());
     let mut f = File::open("texts/ch10-solution.txt").unwrap();
     let mut solution = String::new();
-    f.read_to_string(&mut solution);
+    f.read_to_string(&mut solution).ok();
     assert_eq!(output, solution.as_bytes());
     
 
@@ -53,6 +50,27 @@ fn challenge10() {
 
 }
 
+fn challenge11() {
+    let plaintext = &['a' as u8; 52]; // 2x16 for repeating blocks plus account for <=10 on each side
+    let ct1 = encryption_oracle(plaintext);
+    let ct2 = encryption_oracle(plaintext);
+    println!("{}", raw_to_hex(&ct1));
+    println!("{}", match detect_cipher_type(&ct1) { CipherType::Ecb => "ECB", _ =>"CBC" });
+    println!("{}", raw_to_hex(&ct2));
+    println!("{}", match detect_cipher_type(&ct2) { CipherType::Ecb => "ECB", _ =>"CBC" });
+
+}
+
+fn challenge12() {
+    let oracle = EcbEncryptionOracle::new();
+    let breaker = EcbBreaker::new(oracle);
+
+    let mut f = File::open("texts/ch12-solution.txt").unwrap();
+    let mut solution = String::new();
+    f.read_to_string(&mut solution).ok();
+    assert_eq!(solution, String::from_utf8(breaker.decrypt().unwrap()).unwrap());
+}
+
 
 fn main() {
     let mut argi = env::args();
@@ -60,7 +78,9 @@ fn main() {
 
     dispatch_ch!(argi,
                  challenge9,
-                 challenge10
+                 challenge10,
+                 challenge11,
+                 challenge12
     );
 }
 

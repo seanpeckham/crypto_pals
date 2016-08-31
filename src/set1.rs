@@ -9,8 +9,6 @@ use std::fs::File;
 mod util;
 use util::*;
 
-mod s1;
-
 use_ch!(s1, ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8);
 
 
@@ -97,7 +95,7 @@ I go crazy when I hear a cymbal";
     //let key = "5465726d696e61746f7220583a204272696e6720746865206e6f697365";
     let mut f = File::open("texts/ch6-solution.txt").unwrap();
     let mut solution = String::new();
-    f.read_to_string(&mut solution);
+    f.read_to_string(&mut solution).ok();
     assert_eq!(solution, rkx.decrypt_file_base64("texts/ch6.txt"));
 
     // get_input!(fname, 0);
@@ -110,9 +108,9 @@ fn challenge7() {
 
     let mut f = File::open("texts/ch7-solution.txt").unwrap();
     let mut solution = String::new();
-    f.read_to_string(&mut solution);
+    f.read_to_string(&mut solution).ok();
 
-    match decrypt_aes_128_ecb(key, None, &ciphertext) {
+    match decrypt_aes_128_ecb(key, &ciphertext) {
         Ok(result) => {
             let plaintext = String::from_utf8(result).unwrap();
             //println!("{}", plaintext);

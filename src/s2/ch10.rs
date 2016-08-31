@@ -3,7 +3,6 @@ extern crate openssl;
 use self::openssl::crypto::symm::*;
 use self::openssl::error::ErrorStack;
 
-use s1::ch1::*;
 use s1::ch2::buffer_xor;
 use s2::ch9::pkcs_7_pad;
 

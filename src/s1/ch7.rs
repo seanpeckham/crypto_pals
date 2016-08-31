@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 extern crate openssl;
 
 use self::openssl::crypto::symm::*;

@@ -19,7 +19,7 @@ pub fn find_rep_blocks(filename: &str) -> String {
     String::from("Not found")
 }
 
-fn has_rep_blocks(bytes: &[u8]) -> bool {
+pub fn has_rep_blocks(bytes: &[u8]) -> bool {
     let max_idx = bytes.len() - BLOCK_SIZE;
     let mut left = 0;
 

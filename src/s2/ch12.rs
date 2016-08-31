@@ -1,9 +1,3 @@
-// extern crate libc;
-// extern crate openssl;
-
-// use self::libc::rand;
-// use self::openssl::crypto::symm::*;
-
 use std::collections::*;
 
 use s2::ch11::*;
@@ -59,65 +53,66 @@ impl EcbBreaker {
     }
 
     pub fn decrypt(self: &Self) -> Option<Vec<u8>> {
-        let ciphertext = self.oracle.gen_ciphertext(&vec![]);
-        // match detect_cipher_type(&ciphertext) {
-        //     CipherType::Ecb => { },
-        //     _ => { println!("Not ECB"); return None }
-        // }
         let block_size = self.discover_block_size();
+
+        let ciphertext = self.oracle.gen_ciphertext(&vec![]);
         if ciphertext.len() % block_size != 0 {
             return None
         }
-
         let block_count = ciphertext.len() / block_size;
+
         let mut result = vec![];
-        let mut feed = vec!['A' as u8; block_size];
+        let mut buffer = vec!['A' as u8; block_size];
 
         for block_idx in 0..block_count {
-            let block = self.decrypt_block(block_idx, feed);
+            let block = self.decrypt_block(block_idx, buffer);
             result.extend_from_slice(&block);
-            feed = block;
-            if feed.len() < block_size {
-                if block_idx + 1 != block_count {
-                    return None
+            buffer = block;
+
+            if buffer.len() < block_size {
+                if block_idx + 1 == block_count {
+                    // padding case
+                    break
                 }
-                break
+                // something went wrong
+                return None
             }
         }
         Some(result)
     }
 
-    pub fn decrypt_block(self: &Self, idx: usize, mut feed: Vec<u8>) -> Vec<u8> {
-        let size = feed.len();
+    pub fn decrypt_block(self: &Self, idx: usize, mut buffer: Vec<u8>) -> Vec<u8> {
+        let size = buffer.len();
 
         for byte in 0..size {
             for i in 0..(size - 1) {
-                feed[i] = feed[i+1];
+                buffer[i] = buffer[i+1];
             }
-            if let Some(byte) = self.decrypt_byte(&mut feed, size - byte - 1, idx) {
-                feed[size - 1] = byte;
+            if let Some(byte) = self.decrypt_byte(&mut buffer, size - byte - 1, idx) {
+                buffer[size - 1] = byte;
             } else {
+                // assume we've hit padding bytes. this breaks our scheme because as
+                // we change the size of the ciphertext, the padding values change
                 for i in 0..byte - 1 {
-                    feed[i] = feed[i + (size - byte) - 1];
+                    buffer[i] = buffer[i + (size - byte) - 1];
                 }
-                feed.resize(byte - 1, 0);
+                buffer.resize(byte - 1, 0);
                 break;
             }
         }
-        feed
+        buffer
     }
 
-    pub fn decrypt_byte(self: &Self, feed: &mut [u8], idx: usize,
+    pub fn decrypt_byte(self: &Self, buffer: &mut [u8], idx: usize,
                         block_idx: usize) -> Option<u8> {
-        let size = feed.len();
+        let size = buffer.len();
         let offset = block_idx * size;
         let mut dict = HashMap::new();
 
         for i in 0..256 {
-            feed[size - 1] = i as u8;
-            let block = &self.oracle.gen_ciphertext(&feed)[0..size];
-            if block_idx == 2 {
-            }
+            buffer[size - 1] = i as u8;
+            let block = &self.oracle.gen_ciphertext(&buffer)[0..size];
+
             let entry: Vec<u8> = block.iter().map(|x| *x).collect();
             dict.insert(entry, i as u8);
         }
