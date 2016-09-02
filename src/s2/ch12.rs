@@ -32,7 +32,7 @@ pub struct EcbBreaker {
 impl EcbBreaker {
     pub fn new(oracle: EcbEncryptionOracle) -> Self { EcbBreaker { oracle:oracle } }
     
-    pub fn discover_block_size(self: &Self) -> usize {
+    fn discover_block_size(self: &Self) -> usize {
         let mut data = Vec::new();
         let mut first_byte = None;
         loop {
@@ -81,7 +81,7 @@ impl EcbBreaker {
         Some(result)
     }
 
-    pub fn decrypt_block(self: &Self, idx: usize, mut buffer: Vec<u8>) -> Vec<u8> {
+    fn decrypt_block(self: &Self, idx: usize, mut buffer: Vec<u8>) -> Vec<u8> {
         let size = buffer.len();
 
         for byte in 0..size {
@@ -103,11 +103,11 @@ impl EcbBreaker {
         buffer
     }
 
-    pub fn decrypt_byte(self: &Self, buffer: &mut [u8], idx: usize,
+    fn decrypt_byte(self: &Self, buffer: &mut [u8], idx: usize,
                         block_idx: usize) -> Option<u8> {
         let size = buffer.len();
         let offset = block_idx * size;
-        let mut dict = HashMap::new();
+        let mut dict = HashMap::with_capacity(256);
 
         for i in 0..256 {
             buffer[size - 1] = i as u8;

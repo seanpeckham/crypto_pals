@@ -12,7 +12,7 @@ mod util;
 use util::*;
 
 use_ch!(s1, ch1);//, ch2, ch3, ch4, ch5, ch6, ch7, ch8);
-use_ch!(s2, ch9, ch10, ch11, ch12);
+use_ch!(s2, ch9, ch10, ch11, ch12, ch13);
 
 fn challenge9() {
     let mut plaintext = b"YELLOW_SUBMARINE".to_vec();
@@ -71,6 +71,12 @@ fn challenge12() {
     assert_eq!(solution, String::from_utf8(breaker.decrypt().unwrap()).unwrap());
 }
 
+fn challenge13() {
+    let server = ProfileServer::new();
+
+    assert_eq!("email=which@foo.bar&uid=11&role=admin",
+               encode_profile(&make_admin_profile(&server)));
+}
 
 fn main() {
     let mut argi = env::args();
@@ -80,7 +86,8 @@ fn main() {
                  challenge9,
                  challenge10,
                  challenge11,
-                 challenge12
+                 challenge12,
+                 challenge13
     );
 }
 
