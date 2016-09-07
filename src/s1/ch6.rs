@@ -136,7 +136,6 @@ impl RepKeyXor {
 
         for k in 0..256u16 {
             let result_buf = buffer_xor_1byte(&input, k as u8);
-            // if let Some(s) = String::from_utf8(result_buf).ok() {
 
             let score = score_text(&result_buf);
 
@@ -148,7 +147,6 @@ impl RepKeyXor {
             // }
             
             if score > best_result.score {
-            // if (score.abs() - 1.0).abs() < (best_result.score.abs() - 1.0).abs() {
                 best_result.key = vec![k as u8];
                 best_result.result = result_buf;//s.into_bytes();
                 best_result.score = score;
