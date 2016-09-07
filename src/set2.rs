@@ -12,7 +12,7 @@ mod util;
 use util::*;
 
 use_ch!(s1, ch1);//, ch2, ch3, ch4, ch5, ch6, ch7, ch8);
-use_ch!(s2, ch9, ch10, ch11, ch12, ch13);
+use_ch!(s2, ch9, ch10, ch11, ch12, ch13, ch14);
 
 fn challenge9() {
     let mut plaintext = b"YELLOW_SUBMARINE".to_vec();
@@ -78,6 +78,16 @@ fn challenge13() {
                encode_profile(&make_admin_profile(&server)));
 }
 
+fn challenge14() {
+    let oracle = EcbEncryptionOracle2::new();
+    let breaker = EcbBreaker2::new(oracle);
+
+    let mut f = File::open("texts/ch12-solution.txt").unwrap();
+    let mut solution = String::new();
+    f.read_to_string(&mut solution).ok();
+    assert_eq!(solution, String::from_utf8(breaker.decrypt().unwrap()).unwrap());
+}
+
 fn main() {
     let mut argi = env::args();
     argi.next(); // eat basename
@@ -87,7 +97,8 @@ fn main() {
                  challenge10,
                  challenge11,
                  challenge12,
-                 challenge13
+                 challenge13,
+                 challenge14
     );
 }
 

@@ -122,4 +122,5 @@ pub fn make_admin_profile(server: &ProfileServer) -> UserProfile {
     paste.extend_from_slice(trailing_junk);
 
     server.recv(&paste).unwrap()
+
 }

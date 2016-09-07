@@ -14,7 +14,7 @@ pub fn gen_key() -> Vec<u8> {
         .collect()
 }
 
-fn rand_bytes(range: (i32, i32)) -> Vec<u8> {
+pub fn rand_bytes(range: (i32, i32)) -> Vec<u8> {
     unsafe { (0..(rand() % (range.1 - range.0) + range.0))
               .map(|_| rand() as u8)
               .collect()
