@@ -12,7 +12,7 @@ mod util;
 use util::*;
 
 use_ch!(s1, ch1);//, ch2, ch3, ch4, ch5, ch6, ch7, ch8);
-use_ch!(s2, ch9, ch10, ch11, ch12, ch13, ch14);
+use_ch!(s2, ch9, ch10, ch11, ch12, ch13, ch14, ch15, ch16);
 
 fn challenge9() {
     let mut plaintext = b"YELLOW_SUBMARINE".to_vec();
@@ -88,6 +88,25 @@ fn challenge14() {
     assert_eq!(solution, String::from_utf8(breaker.decrypt().unwrap()).unwrap());
 }
 
+fn challenge15() {
+    let valid = b"ICE ICE BABY\x04\x04\x04\x04";
+    let invalid1 = b"ICE ICE BABY\x05\x05\x05\x05";
+    let invalid2 = b"ICE ICE BABY\x01\x02\x03\x04";
+
+    for &string in [valid, invalid1, invalid2].iter() {
+        let mut v = vec![];
+        v.extend_from_slice(string);
+        match pkcs_7_strip(&mut v) {
+            Some(x) => println!("{}", String::from_utf8(x.clone()).unwrap()),
+            None => println!("invalid")
+        }
+    }
+}
+
+fn challenge16() {
+
+}
+
 fn main() {
     let mut argi = env::args();
     argi.next(); // eat basename
@@ -98,7 +117,9 @@ fn main() {
                  challenge11,
                  challenge12,
                  challenge13,
-                 challenge14
+                 challenge14,
+                 challenge15,
+                 challenge16
     );
 }
 
