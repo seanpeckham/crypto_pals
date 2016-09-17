@@ -5,7 +5,6 @@ use std::collections::HashMap;
 use std::num::*;
 
 use s2::ch11::*;
-use s1::ch1::*;
 use s1::ch7::*;
 
 use std::str::FromStr;
@@ -51,6 +50,7 @@ impl From<regex::Error> for KvParseError {
         KvParseError::RegexError(err)
     }
 }
+#[allow(unused_variables)]
 impl From<ParseIntError> for KvParseError {
     fn from(err: ParseIntError) -> KvParseError {
         KvParseError::ValParseErr

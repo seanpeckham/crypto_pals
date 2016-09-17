@@ -1,3 +1,5 @@
+#![allow(unused_imports)]
+
 extern crate libc;
 extern crate time;
 
@@ -56,7 +58,7 @@ impl EcbBreaker2 {
         let mut left = 0;
         
         while left < max_idx {
-            let mut right = left + BLOCK_SIZE;
+            let right = left + BLOCK_SIZE;
             let block1 = &bytes[left..right];
             
             if right < max_idx {
@@ -65,7 +67,6 @@ impl EcbBreaker2 {
                     result.insert(left);
                 }
             }
-            right += BLOCK_SIZE;
             left += BLOCK_SIZE;
         }
         result
@@ -88,7 +89,6 @@ impl EcbBreaker2 {
                 }
             }
         }
-        Err(-4)
     }
 
     pub fn decrypt(self: &Self) -> Result<Vec<u8>, i32> {

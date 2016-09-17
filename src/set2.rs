@@ -104,7 +104,7 @@ fn challenge15() {
 }
 
 fn challenge16() {
-
+    assert!(bit_flip_attack());
 }
 
 fn main() {
