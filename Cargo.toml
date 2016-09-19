@@ -11,6 +11,14 @@ path = "src/set1.rs"
 name = "set2"
 path = "src/set2.rs"
 
+[lib]
+name = "set3"
+path = "src/set3.rs"
+
+#[[bin]]
+#name = "set3"
+#path = "src/set3.rs"
+
 [dependencies]
 num = "*"
 openssl = "0.8"
